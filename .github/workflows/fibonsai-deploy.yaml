@@ -36,12 +36,15 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
           cache: 'maven'
+          server-id: xchange
+          server-username: GITHUB_USERNAME
+          server-password: GITHUB_TOKEN
 
       - name: Publish to GitHub Packages Apache Maven
-        run: mvn -B deploy -DskipTests -Dmaven.javadoc.skip -DskipIntegrationTests --settings etc/settings-fibonsai.xml -Dfmt.skip=true;
+        run: mvn -B deploy -DskipTests -Dmaven.javadoc.skip -DskipIntegrationTests -Dfmt.skip=true;
         env:
-          CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
-          CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
+          GITHUB_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.CI_DEPLOY_PASSWORD }}
 
   clean-old:
     runs-on: ubuntu-latest
