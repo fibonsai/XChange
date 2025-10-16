@@ -1,0 +1,168 @@
+name: Deploy artifacts
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        ref: 'fibonsai-develop'
+
+    - name: Java 21
+      uses: actions/setup-java@v5
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+        cache: 'maven'
+
+    - name: Build with Maven
+      run: mvn -B package
+
+    - name: Publish to GitHub Packages Apache Maven
+      run: mvn deploy -DskipTests -Dmaven.javadoc.skip -DskipIntegrationTests
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package:
+          - xchange-core
+          - xchange-ascendex
+          - xchange-stream-core
+          - xchange-bibox
+          - xchange-binance
+          - xchange-bitbay
+          - xchange-bitcoinaverage
+          - xchange-bitcoincore
+          - xchange-bitcoinde
+          - xchange-bitcointoyou
+          - xchange-bitfinex
+          - xchange-bitflyer
+          - xchange-bitget
+          - xchange-bitget-futures
+          - xchange-bithumb
+          - xchange-bitmex
+          - xchange-bitso
+          - xchange-bitstamp
+          - xchange-bity
+          - xchange-bitz
+          - xchange-bl3p
+          - xchange-blockchain
+          - xchange-btcc
+          - xchange-btcmarkets
+          - xchange-btcturk
+          - xchange-bybit
+          - xchange-cexio
+          - xchange-coinbase
+          - xchange-coinbasepro
+          - xchange-coincheck
+          - xchange-coindeal
+          - xchange-coindirect
+          - xchange-coinegg
+          - xchange-coinex
+          - xchange-coinfloor
+          - xchange-coinjar
+          - xchange-coinmarketcap
+          - xchange-coinmate
+          - xchange-coinone
+          - xchange-coinsph
+          - xchange-dase
+          - xchange-deribit
+          - xchange-dvchain
+          - xchange-dydx
+          - xchange-enigma
+          - xchange-examples
+          - xchange-exmo
+          - xchange-gateio
+          - xchange-gateio-v4
+          - xchange-gemini
+          - xchange-hitbtc
+          - xchange-huobi
+          - xchange-idex
+          - xchange-independentreserve
+          - xchange-itbit
+          - xchange-koineks
+          - xchange-koinim
+          - xchange-kraken
+          - xchange-krakenfutures
+          - xchange-kucoin
+          - xchange-kuna
+          - xchange-latoken
+          - xchange-livecoin
+          - xchange-luno
+          - xchange-mercadobitcoin
+          - xchange-mexc
+          - xchange-okcoin
+          - xchange-okex
+          - xchange-openexchangerates
+          - xchange-paribu
+          - xchange-paymium
+          - xchange-poloniex
+          - xchange-ripple
+          - xchange-simulated
+          - xchange-stream-binance
+          - xchange-stream-bitfinex
+          - xchange-stream-bitflyer
+          - xchange-stream-bitget
+          - xchange-stream-bitmex
+          - xchange-stream-bitstamp
+          - xchange-stream-btcmarkets
+          - xchange-stream-bybit
+          - xchange-stream-cexio
+          - xchange-stream-coinbasepro
+          - xchange-stream-coincheck
+          - xchange-stream-coinjar
+          - xchange-stream-coinmate
+          - xchange-stream-coinsph
+          - xchange-stream-dydx
+          - xchange-stream-gateio
+          - xchange-stream-gemini
+          - xchange-stream-gemini-v2
+          - xchange-stream-hitbtc
+          - xchange-stream-huobi
+          - xchange-stream-kraken
+          - xchange-stream-kraken-v2
+          - xchange-stream-krakenfutures
+          - xchange-stream-kucoin
+          - xchange-stream-okcoin
+          - xchange-stream-okex
+          - xchange-stream-poloniex2
+          - xchange-stream-service-core
+          - xchange-stream-service-netty
+          - xchange-stream-service-pubnub
+          - xchange-tradeogre
+          - xchange-truefx
+          - xchange-upbit
+          - xchange-vaultoro
+          - xchange-yobit
+          - xchange-zaif
+
+    steps:
+      - uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ matrix.package }}
+          package-type: 'maven'
+          min-versions-to-keep: 2
+
+      - uses: actions/checkout@v5
+        with:
+          ref: 'fibonsai-develop'
+
+      - name: Java 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Publish to GitHub Packages Apache Maven
+        run: mvn deploy -DskipTests -Dmaven.javadoc.skip -DskipIntegrationTests --settings etc/settings-fibonsai.xml -Dfmt.skip=true;
+        env:
+          CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
+          CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
