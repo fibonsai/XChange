@@ -18,12 +18,9 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
         cache: 'maven'
-        server-id: xchange
-        server-username: CI_DEPLOY_USERNAME
-        server-password: CI_DEPLOY_PASSWORD
 
     - name: Publish to GitHub Packages Apache Maven
-      run: mvn -B -N package deploy -DskipTests -Dmaven.javadoc.skip -DskipIntegrationTests -Dfmt.skip=true;
+      run: mvn -B -N package deploy -DskipTests -Dmaven.javadoc.skip -DskipIntegrationTests -Dfmt.skip=true --settings etc/settings-fibonsai.xml;
       env:
         CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
         CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
