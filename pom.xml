@@ -5,7 +5,7 @@
 
     <groupId>org.knowm.xchange</groupId>
     <artifactId>xchange-parent</artifactId>
-    <version>5.2.3-SNAPSHOT</version>
+    <version>20251015.0</version>
     <packaging>pom</packaging>
 
     <name>XChange</name>
@@ -32,6 +32,9 @@
     <developers>
         <developer>
             <name>Tim Molter</name>
+        </developer>
+        <developer>
+            <name>Marcelo Teixeira Monteiro</name>
         </developer>
     </developers>
 
@@ -150,24 +153,34 @@
     </modules>
 
     <scm>
-        <connection>scm:git:git@github.com:knowm/XChange.git</connection>
-        <developerConnection>scm:git:git@github.com:knowm/XChange.git</developerConnection>
+        <connection>scm:git:git@github.com:fibonsai/XChange.git</connection>
+        <developerConnection>scm:git:git@github.com:fibonsai/XChange.git</developerConnection>
         <tag>HEAD</tag>
         <url>git@github.com:knowm/XChange.git</url>
     </scm>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/knowm/XChange/issues</url>
+        <url>https://github.com/fibonsai/XChange/issues</url>
     </issueManagement>
 
     <ciManagement>
-        <url>https://travis-ci.org/github/knowm/XChange</url>
+        <url>https://travis-ci.org/github/fibonsai/XChange</url>
     </ciManagement>
 
+    <distributionManagement>
+        <repository>
+            <id>xchange</id>
+            <name>fibonsai</name>
+            <url>https://maven.pkg.github.com/fibonsai/XChange</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <revision>20251010.2</revision>
 
         <skipIntegrationTests>true</skipIntegrationTests>
         <version.assertj>3.27.3</version.assertj>
@@ -176,7 +189,7 @@
         <version.fasterxml>2.19.1</version.fasterxml>
         <version.github.mmazi>3.1</version.github.mmazi>
 
-        <version.java>11</version.java>
+        <version.java>21</version.java>
         <version.java-jwt>4.5.0</version.java-jwt>
         <version.junit>5.12.2</version.junit>
         <version.knowm.xchart>3.8.8</version.knowm.xchart>
@@ -396,26 +409,16 @@
 
     </dependencies>
 
-    <repositories>
-        <repository>
-            <name>Central Portal Snapshots</name>
-            <id>central-portal-snapshots</id>
-            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>maven_central</id>
-            <name>Maven Central</name>
-            <url>https://repo.maven.apache.org/maven2/</url>
-        </repository>
-    </repositories>
-
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>2.19.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
 
         <plugins>
             <plugin>
@@ -539,16 +542,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.sonatype.central</groupId>
-                <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.9.0</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <publishingServerId>central</publishingServerId>
-                    <autoPublish>true</autoPublish>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.3.1</version>
@@ -565,6 +558,24 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <configuration>
+                    <ruleSet>
+                        <ignoreVersions>
+                            <ignoreVersion>
+                                <type>regex</type>
+                                <version>(.+-SNAPSHOT|.+-rc\d|.+-M\d)</version>
+                            </ignoreVersion>
+                            <ignoreVersion>
+                                <type>regex</type>
+                                <version>.+[-\.](alpha|beta|Alpha).+</version>
+                            </ignoreVersion>
+                        </ignoreVersions>
+                    </ruleSet>
+                </configuration>
             </plugin>
         </plugins>
     </build>
