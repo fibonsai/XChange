@@ -23,10 +23,10 @@ jobs:
         server-password: GITHUB_TOKEN
 
     - name: Build with Maven
-      run: mvn -B package
+      run: mvn -B -N package
 
     - name: Publish to GitHub Packages Apache Maven
-      run: mvn -B deploy -DskipTests -Dmaven.javadoc.skip -DskipIntegrationTests -Dfmt.skip=true;
+      run: mvn -B -N deploy -DskipTests -Dmaven.javadoc.skip -DskipIntegrationTests -Dfmt.skip=true;
       env:
         GITHUB_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
         GITHUB_TOKEN: ${{ secrets.CI_DEPLOY_PASSWORD }}
