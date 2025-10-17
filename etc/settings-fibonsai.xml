@@ -17,15 +17,10 @@
         <httpHeaders>
           <property>
             <name>Authorization</name>
-            <value>Bearer ${env.CI_DEPLOY_PASSWORD}</value>
+	    <value>Bearer ${{env.GITHUB_TOKEN}}</value>
           </property>
         </httpHeaders>
       </configuration>
-    </server>
-    <server>
-      <id>github</id>
-      <username>${env.CI_DEPLOY_USERNAME}</username>
-      <password>${env.CI_DEPLOY_PASSWORD}</password>
     </server>
   </servers>
   <mirrors/>
