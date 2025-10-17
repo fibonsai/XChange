@@ -125,6 +125,6 @@ jobs:
       - uses: actions/delete-package-versions@v5
         continue-on-error: true
         with:
-          package-name: ${{ matrix.package }}
+          package-name: org.knowm.xchange.${{ matrix.package }}
           package-type: 'maven'
           min-versions-to-keep: 2
