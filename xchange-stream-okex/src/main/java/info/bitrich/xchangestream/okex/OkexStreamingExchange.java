@@ -8,11 +8,12 @@ import info.bitrich.xchangestream.service.netty.ConnectionStateModel.State;
 import info.bitrich.xchangestream.service.netty.WebSocketClientHandler;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
-import java.util.ArrayList;
-import java.util.List;
 import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.okex.OkexExchange;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OkexStreamingExchange extends OkexExchange implements StreamingExchange {
 
@@ -67,6 +68,10 @@ public class OkexStreamingExchange extends OkexExchange implements StreamingExch
   }
 
   private String getPublicApiUrl() {
+    String overrideWebsocketApiUri = exchangeSpecification.getOverrideWebsocketApiUri();
+    if (overrideWebsocketApiUri != null && !overrideWebsocketApiUri.isBlank()) {
+      return overrideWebsocketApiUri;
+    }
     String apiUrl;
     ExchangeSpecification exchangeSpec = getExchangeSpecification();
     if (exchangeSpec.getOverrideWebsocketApiUri() != null) {
@@ -83,6 +88,10 @@ public class OkexStreamingExchange extends OkexExchange implements StreamingExch
   }
 
   private String getPrivateApiUrl() {
+    String overrideWebsocketApiUri = exchangeSpecification.getOverrideWebsocketApiUri();
+    if (overrideWebsocketApiUri != null && !overrideWebsocketApiUri.isBlank()) {
+      return overrideWebsocketApiUri;
+    }
     String apiUrl;
     boolean userAws =
         Boolean.TRUE.equals(exchangeSpecification.getExchangeSpecificParametersItem(PARAM_USE_AWS));
