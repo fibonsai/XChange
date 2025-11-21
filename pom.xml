@@ -5,7 +5,7 @@
 
     <groupId>org.knowm.xchange</groupId>
     <artifactId>xchange-parent</artifactId>
-    <version>20251015.0</version>
+    <version>20251121.0</version>
     <packaging>pom</packaging>
 
     <name>XChange</name>
